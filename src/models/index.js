@@ -1,10 +1,8 @@
 // models/index.js
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js"; // Your database connection
-
-// 1. Import all of your model files
-import User from "./User.js";
-import Task from "./Task.js"; // Make sure you have a Task model for the association
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/db.js");
+const User = require("./User.js");
+const Task = require("./Task.js");
 
 const db = {};
 
@@ -21,7 +19,8 @@ Object.keys(db).forEach((modelName) => {
 });
 
 // 4. Attach the sequelize instances to the db object
+// 3. Attach sequelize instance and class
 db.sequelize = sequelize;
-db.Sequelize = DataTypes.sequelize;
+db.Sequelize = DataTypes;
 
-export default db;
+module.exports = db;

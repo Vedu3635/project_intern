@@ -1,20 +1,6 @@
 const { sequelize, DataTypes, testConnection } = require("./db");
 dotenv = require("dotenv");
 dotenv.config();
-const UserModel = require("../models/User.js");
-const TaskModel = require("../models/Task.js");
-
-// Init models
-const models = {};
-models.User = UserModel(sequelize, DataTypes);
-models.Task = TaskModel(sequelize, DataTypes);
-
-// Run associations
-Object.keys(models).forEach((modelName) => {
-  if ("associate" in models[modelName]) {
-    models[modelName].associate(models);
-  }
-});
 
 const syncDatabase = async () => {
   try {
@@ -22,7 +8,7 @@ const syncDatabase = async () => {
     if (!connected) return;
     // Development: alter tables to match models
     if (process.env.NODE_ENV === "development") {
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ alter: true });
       console.log("✅ Database synced (alter mode)");
     }
 
