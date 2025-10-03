@@ -9,7 +9,7 @@ const getUser = async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to get all user" });
+    res.status(500).json({ error: "Failed to get all user, server error" });
   }
 };
 
@@ -17,6 +17,10 @@ const getUser = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,
@@ -27,7 +31,7 @@ const createUser = async (req, res) => {
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to create the user" });
+    res.status(500).json({ error: "Failed to create the user, server error" });
   }
 };
 
@@ -36,7 +40,8 @@ const updateUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const user = await User.findByPk(req.params.id);
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user)
+      return res.status(404).json({ error: "User not found, server error" });
     // Only update fields if they exist in request
     if (name) user.name = name;
     if (email) user.email = email;
@@ -51,7 +56,7 @@ const updateUser = async (req, res) => {
     res.status(200).json(userData);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to update user" });
+    res.status(500).json({ error: "Failed to update user, server error" });
   }
 };
 
@@ -64,7 +69,7 @@ const deleteUser = async (req, res) => {
     res.json({ message: "User deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to delete user" });
+    res.status(500).json({ error: "Failed to delete user, server error" });
   }
 };
 

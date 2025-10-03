@@ -1,4 +1,9 @@
 const express = require("express");
+const validateBody = require("../middlewares/validate");
+const {
+  registerSchema,
+  updateUserSchema,
+} = require("../validations/userValidation");
 const {
   getUser,
   createUser,
@@ -8,9 +13,9 @@ const {
 const router = express.Router();
 
 router.get("/getall", getUser);
-router.post("/signup", createUser);
+router.post("/signup", validateBody(registerSchema), createUser);
 router.delete("/delete/:id", deleteUser);
-router.put("/update/:id", updateUser);
-router.patch("/update/:id", updateUser);
+router.put("/update/:id", validateBody(updateUserSchema), updateUser);
+router.patch("/update/:id", validateBody(updateUserSchema), updateUser);
 
 module.exports = router;
