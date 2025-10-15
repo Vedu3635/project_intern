@@ -4,6 +4,7 @@ dotenv = require("dotenv");
 dotenv.config();
 const { syncDatabase } = require("./config/sync");
 const userRoutes = require("./routes/userRoute");
+const taskRoutes = require("./routes/taskRoute");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -11,8 +12,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// user routes
+// routes
 app.use("/users", userRoutes);
+app.use("/task", taskRoutes);
 
 const startServer = async () => {
   try {

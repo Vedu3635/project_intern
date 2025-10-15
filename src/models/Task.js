@@ -53,6 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "user", // This alias is optional but helpful for queries
     });
+    // Remove the User.hasMany line from here
   };
 
   return Task;
