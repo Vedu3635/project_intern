@@ -1,4 +1,5 @@
 const express = require("express");
+const verifyToken = require("../middlewares/authMiddleware");
 const validateBody = require("../middlewares/validate");
 const {
   createTaskSchema,
@@ -13,14 +14,15 @@ const {
 } = require("../controllers/taskController");
 const router = express.Router();
 
-router.post("/create", validateBody(createTaskSchema), createTask);
-router.get("/getAll/:id", getAllTask);
-router.get("/get/:userid/:taskid", getTask);
+router.post("/create", verifyToken, validateBody(createTaskSchema), createTask);
+router.get("/getAll/:id", verifyToken, getAllTask);
+router.get("/get/:userid/:taskid", verifyToken, getTask);
 router.get(
   "/update/:userid/:taskid",
+  verifyToken,
   validateBody(updateTaskSchema),
   updateTask
 );
-router.delete("/delete/:userid/:taskid", deleteTask);
+router.delete("/delete/:userid/:taskid", verifyToken, deleteTask);
 
 module.exports = router;

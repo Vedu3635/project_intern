@@ -39,6 +39,7 @@ const getTask = async (req, res) => {
 };
 
 const getAllTask = async (req, res) => {
+  console.log("Hi");
   try {
     const tasks = await Task.findAll({
       where: { userId: req.params.id },

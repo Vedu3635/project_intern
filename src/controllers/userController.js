@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const db = require("../models/index");
-const { User } = db;
+const { User } = require("../models/index.js");
+const { generateToken } = require("../utils/jwt.js");
 
 // get user
 const getUser = async (req, res) => {
@@ -13,8 +14,8 @@ const getUser = async (req, res) => {
   }
 };
 
-// create user
-const createUser = async (req, res) => {
+// register user
+const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ where: { email } });
@@ -32,6 +33,29 @@ const createUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create the user, server error" });
+  }
+};
+
+// login user
+
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user)
+      return res.status(400).json({ message: "User not found on this email." });
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.json(400).json({ message: "Invalid password." });
+
+    const token = generateToken({
+      id: user.id,
+      username: user.name,
+      email: user.email,
+    });
+    res.status(200).json({ message: "Login successful", token });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -75,7 +99,8 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   getUser,
-  createUser,
+  register,
+  login,
   updateUser,
   deleteUser,
 };
