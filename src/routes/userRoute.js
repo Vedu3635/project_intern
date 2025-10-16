@@ -22,15 +22,10 @@ router.post("/login", login);
 
 // Protected Routes
 router.get("/users", verifyToken, getUser);
-router.delete("/delete/:id", verifyToken, deleteUser);
-router.put(
-  "/update/:id",
-  verifyToken,
-  validateBody(updateUserSchema),
-  updateUser
-);
+router.delete("/delete", verifyToken, deleteUser);
+router.put("/update", verifyToken, validateBody(updateUserSchema), updateUser);
 router.patch(
-  "/update/:id",
+  "/update",
   verifyToken,
   validateBody(updateUserSchema),
   updateUser

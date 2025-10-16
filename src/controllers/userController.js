@@ -63,7 +63,7 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.user.id);
     if (!user)
       return res.status(404).json({ error: "User not found, server error" });
     // Only update fields if they exist in request
@@ -87,7 +87,7 @@ const updateUser = async (req, res) => {
 // delete user
 const deleteUser = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ error: "User not found" });
     await user.destroy();
     res.json({ message: "User deleted successfully" });

@@ -39,10 +39,9 @@ const getTask = async (req, res) => {
 };
 
 const getAllTask = async (req, res) => {
-  console.log("Hi");
   try {
     const tasks = await Task.findAll({
-      where: { userId: req.params.id },
+      where: { userId: req.user.id },
     });
     if (tasks.length === 0) {
       return res.status(404).json({ error: "No tasks found" });

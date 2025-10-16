@@ -15,7 +15,7 @@ const {
 const router = express.Router();
 
 router.post("/create", verifyToken, validateBody(createTaskSchema), createTask);
-router.get("/getAll/:id", verifyToken, getAllTask);
+router.get("/getAll", verifyToken, getAllTask);
 router.get("/get/:userid/:taskid", verifyToken, getTask);
 router.get(
   "/update/:userid/:taskid",
